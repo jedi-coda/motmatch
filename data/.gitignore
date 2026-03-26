@@ -1,0 +1,8 @@
+# Never commit raw or processed garage CSVs — they may contain PII
+garages-raw.csv
+garages-clean.csv
+garages-enriched.csv
+*.csv
+
+# Allow this file
+!.gitignore
