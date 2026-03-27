@@ -1,15 +1,3 @@
 {
-  "pages": {
-    "/layout": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/layout.js"
-    ],
-    "/mot-amersham/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/app/mot-amersham/page.css",
-      "static/chunks/app/mot-amersham/page.js"
-    ]
-  }
+  "pages": {}
 }
