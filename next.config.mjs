@@ -1,6 +1,4 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {
-  outputFileTracingRoot: 'C:/Users/Test/motmatch',
-};
+const nextConfig = {};
 
 export default nextConfig;
