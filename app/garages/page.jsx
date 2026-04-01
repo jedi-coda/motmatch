@@ -7,8 +7,6 @@ const SPOTS_REMAINING = 3
 export default function GaragesLanding() {
   const [scrolled, setScrolled] = useState(false)
   const [town, setTown] = useState('')
-  const [submitted, setSubmitted] = useState(false)
-  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 40)
@@ -19,7 +17,6 @@ export default function GaragesLanding() {
   async function handleSearch(e) {
     e?.preventDefault()
     if (!town.trim()) return
-    // For now redirect to Brighton demo
     window.location.href = '/demo/brighton-mot-centre'
   }
 
@@ -36,8 +33,8 @@ export default function GaragesLanding() {
           transition: all 0.3s;
         }
         .nav.scrolled {
-          background: rgba(10,10,10,0.92);
-          backdrop-filter: blur(12px);
+          background: rgba(10,10,10,0.95);
+          backdrop-filter: blur(16px);
           border-bottom: 1px solid rgba(255,255,255,0.06);
         }
         .logo {
@@ -60,112 +57,179 @@ export default function GaragesLanding() {
           min-height: 100vh;
           display: flex; flex-direction: column;
           justify-content: center; align-items: center;
-          text-align: center; padding: 8rem 1.5rem 4rem;
-          background: radial-gradient(ellipse 80% 60% at 50% 40%, rgba(74,222,128,0.07) 0%, transparent 70%), #0a0a0a;
+          text-align: center; padding: 8rem 1.5rem 5rem;
+          background:
+            radial-gradient(ellipse 80% 60% at 50% 40%, rgba(74,222,128,0.07) 0%, transparent 70%),
+            #0a0a0a;
           position: relative;
         }
         .hero::before {
           content: '';
           position: absolute; inset: 0;
           background-image:
-            linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+            linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px);
           background-size: 60px 60px;
+          pointer-events: none;
         }
-        .hero-inner { position: relative; max-width: 720px; }
+        .hero-inner { position: relative; max-width: 760px; width: 100%; }
+
         .eyebrow {
-          font-size: 0.72rem; font-weight: 700;
-          letter-spacing: 0.18em; color: #4ade80;
-          text-transform: uppercase; margin-bottom: 1.2rem;
+          font-size: 0.7rem; font-weight: 700;
+          letter-spacing: 0.2em; color: #4ade80;
+          text-transform: uppercase; margin-bottom: 1.5rem;
           opacity: 0; animation: fadeUp 0.5s ease forwards 0.1s;
         }
         .hero-title {
           font-family: 'Barlow Condensed', sans-serif;
-          font-size: clamp(3rem, 8vw, 6rem);
-          font-weight: 800; line-height: 0.95;
+          font-size: clamp(2.6rem, 6vw, 5rem);
+          font-weight: 800; line-height: 1.0;
           color: #fff; margin-bottom: 1.25rem;
           opacity: 0; animation: fadeUp 0.5s ease forwards 0.2s;
+          letter-spacing: -0.01em;
         }
-        .hero-title em { font-style: normal; color: #4ade80; }
         .hero-sub {
-          font-size: clamp(1rem, 1.8vw, 1.1rem);
-          font-weight: 300; color: rgba(240,240,240,0.55);
-          max-width: 500px; margin: 0 auto 2rem;
-          line-height: 1.7;
+          font-size: clamp(1.1rem, 2vw, 1.3rem);
+          font-weight: 400; color: rgba(240,240,240,0.5);
+          margin: 0 auto 2.5rem;
+          line-height: 1.5;
           opacity: 0; animation: fadeUp 0.5s ease forwards 0.3s;
         }
 
-        /* Search box */
+        /* Search */
         .search-wrap {
           opacity: 0; animation: fadeUp 0.5s ease forwards 0.4s;
-          margin-bottom: 1.5rem;
+          margin-bottom: 1rem;
         }
         .search-box {
-          display: flex; gap: 0;
+          display: flex;
           background: rgba(255,255,255,0.05);
-          border: 1px solid rgba(255,255,255,0.12);
+          border: 1px solid rgba(255,255,255,0.14);
           border-radius: 10px; overflow: hidden;
-          max-width: 480px; margin: 0 auto;
+          max-width: 500px; margin: 0 auto;
+          transition: border-color 0.2s;
+        }
+        .search-box:focus-within {
+          border-color: rgba(74,222,128,0.5);
         }
         .search-input {
           flex: 1; background: transparent;
           border: none; outline: none;
-          padding: 0.85rem 1.25rem;
+          padding: 0.95rem 1.25rem;
           color: #f0f0f0; font-size: 0.95rem;
           font-family: 'DM Sans', sans-serif;
         }
         .search-input::placeholder { color: rgba(240,240,240,0.3); }
         .search-btn {
           background: #4ade80; color: #0a0a0a;
-          border: none; padding: 0.85rem 1.5rem;
-          font-weight: 700; font-size: 0.9rem;
+          border: none; padding: 0.95rem 1.5rem;
+          font-weight: 700; font-size: 0.88rem;
           cursor: pointer; transition: background 0.2s;
           font-family: 'DM Sans', sans-serif;
+          white-space: nowrap;
         }
         .search-btn:hover { background: #22c55e; }
 
+        /* Trust badges */
+        .trust-badges {
+          display: flex; flex-wrap: wrap; justify-content: center;
+          gap: 0.5rem; margin-bottom: 2rem;
+          opacity: 0; animation: fadeUp 0.5s ease forwards 0.5s;
+        }
+        .trust-badge {
+          font-size: 0.72rem; font-weight: 600;
+          color: rgba(240,240,240,0.4);
+          letter-spacing: 0.05em;
+          display: flex; align-items: center; gap: 0.3rem;
+        }
+        .trust-badge::before { content: '·'; opacity: 0.3; }
+        .trust-badge:first-child::before { display: none; }
+
+        /* Hero actions */
         .hero-actions {
           display: flex; gap: 1rem; justify-content: center;
           flex-wrap: wrap;
-          opacity: 0; animation: fadeUp 0.5s ease forwards 0.5s;
+          opacity: 0; animation: fadeUp 0.5s ease forwards 0.55s;
         }
         .btn-green {
           background: #4ade80; color: #0a0a0a;
-          padding: 0.85rem 2rem; border-radius: 8px;
+          padding: 0.9rem 2rem; border-radius: 8px;
           font-weight: 600; font-size: 0.95rem;
           text-decoration: none; transition: all 0.2s;
+          display: inline-flex; align-items: center; gap: 0.4rem;
         }
         .btn-green:hover { background: #22c55e; transform: translateY(-1px); }
         .btn-ghost {
           background: transparent; color: #f0f0f0;
-          padding: 0.85rem 2rem; border-radius: 8px;
+          padding: 0.9rem 2rem; border-radius: 8px;
           font-weight: 500; font-size: 0.95rem;
           text-decoration: none;
           border: 1px solid rgba(255,255,255,0.15);
           transition: all 0.2s;
         }
-        .btn-ghost:hover { border-color: rgba(255,255,255,0.4); }
+        .btn-ghost:hover { border-color: rgba(255,255,255,0.35); }
 
         /* Urgency */
         .urgency {
-          background: rgba(251,191,36,0.08);
+          background: rgba(251,191,36,0.07);
           border: 1px solid rgba(251,191,36,0.2);
-          border-radius: 8px; padding: 0.7rem 1.25rem;
-          font-size: 0.85rem; color: #fbbf24;
+          border-radius: 8px; padding: 0.65rem 1.25rem;
+          font-size: 0.82rem; color: #fbbf24;
           display: inline-flex; align-items: center; gap: 0.5rem;
-          margin-top: 1.5rem;
-          opacity: 0; animation: fadeUp 0.5s ease forwards 0.6s;
+          margin-top: 1.75rem;
+          opacity: 0; animation: fadeUp 0.5s ease forwards 0.65s;
         }
-        .urgency-dot { width: 6px; height: 6px; border-radius: 50%; background: #fbbf24; animation: pulse 1.5s infinite; }
+        .urgency-dot { width: 6px; height: 6px; border-radius: 50%; background: #fbbf24; animation: pulse 1.5s infinite; flex-shrink: 0; }
+
+        /* Stats row */
+        .stats-row {
+          border-top: 1px solid rgba(255,255,255,0.05);
+          border-bottom: 1px solid rgba(255,255,255,0.05);
+          background: rgba(74,222,128,0.03);
+          padding: 2rem 1.5rem;
+          display: flex; justify-content: center;
+          gap: 0; flex-wrap: wrap;
+        }
+        .stat-item {
+          text-align: center;
+          padding: 0.75rem 3rem;
+          border-right: 1px solid rgba(255,255,255,0.06);
+        }
+        .stat-item:last-child { border-right: none; }
+        .stat-num {
+          font-family: 'Barlow Condensed', sans-serif;
+          font-size: 1.9rem; font-weight: 800;
+          color: #4ade80; line-height: 1;
+        }
+        .stat-label {
+          font-size: 0.72rem; color: rgba(240,240,240,0.4);
+          text-transform: uppercase; letter-spacing: 0.1em;
+          margin-top: 0.3rem;
+        }
+
+        /* Value prop */
+        .value-prop {
+          text-align: center; padding: 3.5rem 1.5rem;
+          max-width: 960px; margin: 0 auto;
+        }
+        .value-prop-text {
+          font-family: 'Barlow Condensed', sans-serif;
+          font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+          font-weight: 700; color: #fff;
+          line-height: 1.2;
+        }
+        .value-prop-text em {
+          font-style: normal; color: #4ade80;
+        }
 
         /* Pricing section */
         .pricing-section {
           max-width: 960px; margin: 0 auto;
-          padding: 5rem 1.5rem;
+          padding: 4rem 1.5rem 5rem;
         }
         .section-eyebrow {
-          font-size: 0.72rem; font-weight: 700;
-          letter-spacing: 0.15em; color: #4ade80;
+          font-size: 0.7rem; font-weight: 700;
+          letter-spacing: 0.18em; color: #4ade80;
           text-transform: uppercase; margin-bottom: 0.75rem;
           text-align: center;
         }
@@ -173,8 +237,12 @@ export default function GaragesLanding() {
           font-family: 'Barlow Condensed', sans-serif;
           font-size: clamp(2rem, 4vw, 2.8rem);
           font-weight: 700; color: #fff;
-          text-align: center; margin-bottom: 3rem;
+          text-align: center; margin-bottom: 0.75rem;
           line-height: 1.1;
+        }
+        .section-sub {
+          text-align: center; color: rgba(240,240,240,0.45);
+          font-size: 0.9rem; margin-bottom: 3rem;
         }
 
         .pricing-grid {
@@ -193,7 +261,7 @@ export default function GaragesLanding() {
         }
         .price-tag {
           font-size: 0.65rem; font-weight: 700;
-          letter-spacing: 0.15em; color: #4ade80;
+          letter-spacing: 0.12em; color: #4ade80;
           text-transform: uppercase; margin-bottom: 0.5rem;
         }
         .price-name {
@@ -201,9 +269,7 @@ export default function GaragesLanding() {
           font-size: 1.5rem; font-weight: 700;
           color: #fff; margin-bottom: 0.75rem;
         }
-        .price-amount {
-          margin-bottom: 0.25rem;
-        }
+        .price-amount { margin-bottom: 0.25rem; }
         .price-strike {
           font-size: 1rem;
           color: rgba(240,240,240,0.25);
@@ -216,7 +282,7 @@ export default function GaragesLanding() {
         }
         .price-per { font-size: 0.9rem; color: rgba(240,240,240,0.4); }
         .price-monthly {
-          font-size: 0.88rem; color: rgba(240,240,240,0.45);
+          font-size: 0.85rem; color: rgba(240,240,240,0.4);
           margin-bottom: 1.5rem;
         }
         .price-features {
@@ -228,24 +294,28 @@ export default function GaragesLanding() {
           font-size: 0.88rem; color: rgba(240,240,240,0.65);
           padding: 0.3rem 0; line-height: 1.5;
         }
-        .price-feature.dim { opacity: 0.3; }
+        .price-cta-wrap { display: flex; flex-direction: column; gap: 0.5rem; }
         .price-cta {
           display: block; text-align: center;
-          padding: 0.85rem; border-radius: 8px;
-          font-weight: 600; font-size: 0.95rem;
+          padding: 0.9rem; border-radius: 8px;
+          font-weight: 700; font-size: 0.95rem;
           text-decoration: none; transition: all 0.2s;
         }
         .price-cta.green { background: #4ade80; color: #0a0a0a; }
-        .price-cta.green:hover { background: #22c55e; }
+        .price-cta.green:hover { background: #22c55e; transform: translateY(-1px); }
         .price-cta.outline {
           border: 1px solid rgba(255,255,255,0.15);
           color: #f0f0f0;
         }
-        .price-cta.outline:hover { border-color: rgba(255,255,255,0.4); }
+        .price-cta.outline:hover { border-color: rgba(255,255,255,0.35); }
+        .price-cta-sub {
+          text-align: center; font-size: 0.75rem;
+          color: rgba(240,240,240,0.3);
+        }
 
         /* Features */
         .features-section {
-          background: rgba(255,255,255,0.02);
+          background: rgba(255,255,255,0.015);
           border-top: 1px solid rgba(255,255,255,0.05);
           border-bottom: 1px solid rgba(255,255,255,0.05);
           padding: 5rem 1.5rem;
@@ -267,7 +337,7 @@ export default function GaragesLanding() {
         .feature-item:hover { background: rgba(74,222,128,0.04); }
         .feature-icon { font-size: 1.3rem; margin-bottom: 0.75rem; }
         .feature-title { font-weight: 600; font-size: 0.9rem; color: #fff; margin-bottom: 0.35rem; }
-        .feature-desc { font-size: 0.82rem; color: rgba(240,240,240,0.45); line-height: 1.6; }
+        .feature-desc { font-size: 0.82rem; color: rgba(240,240,240,0.4); line-height: 1.6; }
 
         /* Demo CTA */
         .demo-cta {
@@ -277,9 +347,9 @@ export default function GaragesLanding() {
         .demo-title {
           font-family: 'Barlow Condensed', sans-serif;
           font-size: clamp(2rem, 4vw, 3rem);
-          font-weight: 800; color: #fff; margin-bottom: 1rem;
+          font-weight: 800; color: #fff; margin-bottom: 0.75rem;
         }
-        .demo-sub { color: rgba(240,240,240,0.5); font-size: 0.95rem; margin-bottom: 2rem; }
+        .demo-sub { color: rgba(240,240,240,0.45); font-size: 0.95rem; margin-bottom: 2rem; }
 
         /* Footer */
         footer {
@@ -289,7 +359,7 @@ export default function GaragesLanding() {
           align-items: center; flex-wrap: wrap; gap: 1rem;
           max-width: 960px; margin: 0 auto;
         }
-        .footer-text { font-size: 0.78rem; color: rgba(240,240,240,0.25); }
+        .footer-text { font-size: 0.78rem; color: rgba(240,240,240,0.2); }
 
         @keyframes fadeUp {
           from { opacity: 0; transform: translateY(16px); }
@@ -297,7 +367,9 @@ export default function GaragesLanding() {
         }
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
-        @media (max-width: 600px) {
+        @media (max-width: 640px) {
+          .stat-item { padding: 0.75rem 1.5rem; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.05); }
+          .stat-item:last-child { border-bottom: none; }
           .hero-actions { flex-direction: column; align-items: center; }
         }
       `}</style>
@@ -313,11 +385,11 @@ export default function GaragesLanding() {
         <div className="hero-inner">
           <p className="eyebrow">For Independent MOT Garages</p>
           <h1 className="hero-title">
-            Your garage.<br />
-            <em>Found. Booked. Paid.</em>
+            You've earned your reputation.<br />
+            Now let it shine online.
           </h1>
           <p className="hero-sub">
-            MOTmatch gives independent garages a professional website and a 24/7 AI receptionist — so you never miss another booking.
+            Turn quiet garages into booked-out businesses.
           </p>
 
           <div className="search-wrap">
@@ -332,6 +404,12 @@ export default function GaragesLanding() {
                 <button className="search-btn" type="submit">Find My Listing →</button>
               </div>
             </form>
+          </div>
+
+          <div className="trust-badges">
+            {['DVSA Aligned', 'UK Hosted', 'SSL Secure', 'Live in 48hrs', '99.9% Uptime'].map(b => (
+              <span key={b} className="trust-badge">{b}</span>
+            ))}
           </div>
 
           <div className="hero-actions">
@@ -350,10 +428,34 @@ export default function GaragesLanding() {
         </div>
       </section>
 
+      {/* Stats row */}
+      <div className="stats-row">
+        {[
+          { num: '47%', label: 'More Bookings' },
+          { num: '3×', label: 'More Calls' },
+          { num: 'Page 1', label: 'Google Results' },
+          { num: '48hrs', label: 'Live & Trading' },
+        ].map(s => (
+          <div key={s.label} className="stat-item">
+            <div className="stat-num">{s.num}</div>
+            <div className="stat-label">{s.label}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* Value prop */}
+      <div className="value-prop">
+        <p className="value-prop-text">
+          One extra MOT booking a week<br />
+          <em>covers your entire monthly fee.</em>
+        </p>
+      </div>
+
       {/* Pricing */}
       <div className="pricing-section" id="pricing">
         <p className="section-eyebrow">Simple Pricing</p>
-        <h2 className="section-title">One price. Everything included.<br />No surprises.</h2>
+        <h2 className="section-title">Everything included.<br />No surprises. No contracts.</h2>
+        <p className="section-sub">Cancel anytime. Most garages are profitable within the first week.</p>
 
         <div className="pricing-grid">
           {/* Standard */}
@@ -376,10 +478,13 @@ export default function GaragesLanding() {
                 <li key={f} className="price-feature">{f}</li>
               ))}
             </ul>
-            <a href="#find" className="price-cta outline">Find My Listing</a>
+            <div className="price-cta-wrap">
+              <a href="#find" className="price-cta outline">Start Your Free Test Drive →</a>
+              <p className="price-cta-sub">See your live site for 14 days — no payment needed</p>
+            </div>
           </div>
 
-          {/* Launch */}
+          {/* Founder */}
           <div className="price-card featured">
             <div className="price-tag">🔥 Launch Price — First 5 Per Town</div>
             <div className="price-name">Founder Package</div>
@@ -389,7 +494,7 @@ export default function GaragesLanding() {
               <span className="price-per"> setup</span>
             </div>
             <div className="price-monthly">
-              then <span style={{ textDecoration: 'line-through', opacity: 0.4 }}>£99</span> £49/month — locked in
+              then <span style={{ textDecoration: 'line-through', opacity: 0.35 }}>£99</span> £49/month — locked in forever
             </div>
             <ul className="price-features">
               {[
@@ -403,7 +508,10 @@ export default function GaragesLanding() {
                 <li key={f} className="price-feature">{f}</li>
               ))}
             </ul>
-            <a href="#find" className="price-cta green">Claim Founder Price →</a>
+            <div className="price-cta-wrap">
+              <a href="#find" className="price-cta green">Start Your Free Test Drive →</a>
+              <p className="price-cta-sub">See your live site for 14 days — no payment needed</p>
+            </div>
           </div>
         </div>
       </div>
@@ -435,11 +543,11 @@ export default function GaragesLanding() {
       {/* Demo CTA */}
       <div className="demo-cta" id="find">
         <h2 className="demo-title">See exactly what you'd get.</h2>
-        <p className="demo-sub">Live demo — try the virtual receptionist right now.</p>
-        <a href="/demo/brighton-mot-centre" target="_blank" className="btn-green" style={{ fontSize: '1rem', padding: '1rem 2.5rem', display: 'inline-block' }}>
+        <p className="demo-sub">Live demo — call the virtual receptionist right now. No sign-up.</p>
+        <a href="/demo/brighton-mot-centre" target="_blank" className="btn-green" style={{ fontSize: '1rem', padding: '1rem 2.5rem', display: 'inline-flex' }}>
           View Live Demo →
         </a>
-        <p style={{ marginTop: '1rem', fontSize: '0.8rem', color: 'rgba(240,240,240,0.25)' }}>
+        <p style={{ marginTop: '1rem', fontSize: '0.78rem', color: 'rgba(240,240,240,0.2)' }}>
           Or search for your garage above to claim your listing
         </p>
       </div>
