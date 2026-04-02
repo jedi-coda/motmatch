@@ -13,15 +13,25 @@ export async function generateMetadata({ params }) {
   const supabase = getSupabase()
   const { data: garage } = await supabase
     .from('garages')
-    .select('trading_name, town, postcode')
+    .select('trading_name, town, postcode, status, claimed, tagline')
     .eq('slug', params.slug)
     .single()
 
   if (!garage) return { title: 'Garage Not Found' }
 
+  const isClaimed = garage.claimed === true || garage.status === 'claimed' || garage.status === 'active'
+
+  if (isClaimed) {
+    const tagline = garage.tagline || `MOT Testing & Vehicle Repairs in ${garage.town}`
+    return {
+      title: `${garage.trading_name} — ${garage.town} | MOTmatch`,
+      description: `${garage.trading_name} in ${garage.town}. ${tagline}. Book your MOT today.`,
+    }
+  }
+
   return {
-    title: `${garage.trading_name} — Claim Your Free Listing | MOTmatch`,
-    description: `${garage.trading_name} in ${garage.town}. Claim your free MOTmatch listing and start getting more bookings today.`,
+    title: `${garage.trading_name} — Claim Your Free Page | MOTmatch`,
+    description: `${garage.trading_name} in ${garage.town}. Claim your free MOTmatch page and get an AI receptionist to answer your calls — free for 5 days.`,
   }
 }
 
